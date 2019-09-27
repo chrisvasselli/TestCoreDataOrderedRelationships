@@ -7,6 +7,8 @@
 //
 
 #import "AppDelegate.h"
+#import "Basket+CoreDataClass.h"
+#import "Basket+CoreDataProperties.h"
 
 @interface AppDelegate ()
 
@@ -17,7 +19,49 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    [self testCoreDataMethods];
     return YES;
+}
+
+- (void) testCoreDataMethods
+{
+    Basket* basket = (Basket*) [NSEntityDescription insertNewObjectForEntityForName:@"Basket" inManagedObjectContext:[self persistentContainer].viewContext];
+
+    // From Basket+CoreDataProperties.h:
+    
+//    - (void)insertObject:(Egg *)value inEggsAtIndex:(NSUInteger)idx;
+//    - (void)removeObjectFromEggsAtIndex:(NSUInteger)idx;
+//    - (void)insertEggs:(NSArray<Egg *> *)value atIndexes:(NSIndexSet *)indexes;
+//    - (void)removeEggsAtIndexes:(NSIndexSet *)indexes;
+//    - (void)replaceObjectInEggsAtIndex:(NSUInteger)idx withObject:(Egg *)value;
+//    - (void)replaceEggsAtIndexes:(NSIndexSet *)indexes withEggs:(NSArray<Egg *> *)values;
+//    - (void)addEggsObject:(Egg *)value;
+//    - (void)removeEggsObject:(Egg *)value;
+//    - (void)addEggs:(NSOrderedSet<Egg *> *)values;
+//    - (void)removeEggs:(NSOrderedSet<Egg *> *)values;
+
+        NSArray<NSString*>* selectors = @[
+            NSStringFromSelector(@selector(insertObject:inEggsAtIndex:)),
+            NSStringFromSelector(@selector(removeObjectFromEggsAtIndex:)),
+            NSStringFromSelector(@selector(insertEggs:atIndexes:)),
+            NSStringFromSelector(@selector(removeEggsAtIndexes:)),
+            NSStringFromSelector(@selector(replaceObjectInEggsAtIndex:withObject:)),
+            NSStringFromSelector(@selector(replaceEggsAtIndexes:withEggs:)),
+            NSStringFromSelector(@selector(addEggsObject:)),
+            NSStringFromSelector(@selector(removeEggsObject:)),
+            NSStringFromSelector(@selector(addEggs:)),
+            NSStringFromSelector(@selector(removeEggs:))
+        ];
+        
+        for ( NSString* selector in selectors )
+        {
+            if ( [basket respondsToSelector:NSSelectorFromString(selector)] )
+                NSLog(@"%@ exists.", selector);
+            else
+                NSLog(@"%@ does not exist.", selector);
+        }
+
 }
 
 
